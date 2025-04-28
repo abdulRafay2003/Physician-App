@@ -56,7 +56,7 @@ export const Dashboard: React.FC<DashboardProps> = ({}) => {
 
   return (
     <MainContainer>
-      <BackHeader heading={'Dashboard'} />
+      {/* <BackHeader heading={'Dashboard'} /> */}
       <View style={{flex: 1}}>
         <FlatList
           data={dashboard_data}

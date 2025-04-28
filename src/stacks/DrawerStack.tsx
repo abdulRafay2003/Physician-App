@@ -9,12 +9,12 @@ import {
 import React, {useState} from 'react';
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {Images, Metrix, NavigationService, RouteNames, Utills} from '../config';
-import {Loader} from '../components';
+import {CustomText, Loader} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {AuthActions, HomeActions} from '../redux/actions';
 import utills from '../config/utills';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Dashboard} from '../screens';
+import {Dashboard, WebView} from '../screens';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,7 +26,10 @@ const DrawerContent: React.FC = () => {
     {
       label: 'Patients Referred',
       onPress: () => {
-        NavigationService.navigate(RouteNames.HomeRoutes.Dashboard);
+        NavigationService.navigate(RouteNames.HomeRoutes.WebView, {
+          from: 'About us',
+          url: 'https://github.com/iamStephenFang/react-native-heart-rate-monitor?tab=readme-ov-file',
+        });
       },
     },
     {
@@ -103,21 +106,32 @@ const DrawerContent: React.FC = () => {
 };
 
 const HeaderIconsComponent: React.FC<{
-  icon: ImageProps['source'];
-  onPress: () => void;
-  size?: number;
-}> = ({icon, onPress, size}) => (
-  <TouchableOpacity onPress={onPress}>
-    <Image
-      source={icon}
-      resizeMode="contain"
-      style={{
-        width: Metrix.HorizontalSize(size || 30),
-        height: Metrix.VerticalSize(size || 30),
-        tintColor: utills.selectedThemeColors().Primary,
-      }}
-    />
-  </TouchableOpacity>
+  item: any;
+}> = ({item}) => (
+  <>
+    {item?.id == '2' ? (
+      <CustomText.RegularText>{item?.title}</CustomText.RegularText>
+    ) : (
+      <TouchableOpacity
+        style={{
+          padding: Metrix.HorizontalSize(12),
+          borderRadius: Metrix.HorizontalSize(100),
+          backgroundColor: utills.selectedThemeColors().Base,
+          ...Metrix.cardShadow,
+        }}
+        onPress={item?.onPress}>
+        <Image
+          source={item?.icon}
+          resizeMode="contain"
+          style={{
+            width: Metrix.HorizontalSize(item?.size || 22),
+            height: Metrix.VerticalSize(item?.size || 22),
+            tintColor: utills.selectedThemeColors().Primary,
+          }}
+        />
+      </TouchableOpacity>
+    )}
+  </>
 );
 
 const CustomHeader = ({navigation}: {navigation: any}) => {
@@ -129,6 +143,16 @@ const CustomHeader = ({navigation}: {navigation: any}) => {
       icon: Images.Drawer,
       onPress: () => navigation?.openDrawer(),
     },
+    {
+      id: '2',
+      title: 'Images.Drawer',
+      onPress: () => navigation?.openDrawer(),
+    },
+    {
+      id: '3',
+      icon: Images.Notification,
+      onPress: () => navigation?.openDrawer(),
+    },
   ];
   return (
     <View
@@ -136,17 +160,12 @@ const CustomHeader = ({navigation}: {navigation: any}) => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: Metrix.HorizontalSize(10),
+        paddingHorizontal: Metrix.HorizontalSize(20),
         marginTop: Metrix.VerticalSize(50),
-        // borderWidth: 1,
+        borderWidth: 1,
       }}>
       {headerIconsData?.map((item: any) => (
-        <HeaderIconsComponent
-          key={item?.id}
-          icon={item?.icon}
-          onPress={item?.onPress}
-          size={item?.size}
-        />
+        <HeaderIconsComponent item={item} />
       ))}
     </View>
   );
@@ -161,11 +180,11 @@ export const DrawerStack: React.FC = () => {
         },
       }}
       drawerContent={() => <DrawerContent />}>
-      {/* <DrawerContent /> */}
       <Drawer.Screen
         name={RouteNames.HomeRoutes.Dashboard}
         component={Dashboard}
       />
+      <Drawer.Screen name={RouteNames.HomeRoutes.WebView} component={WebView} />
     </Drawer.Navigator>
   );
 };
@@ -205,7 +224,7 @@ const styles = StyleSheet.create({
   drawerSection: {
     paddingTop: 25,
     borderTopWidth: 1,
-    borderColor: Utills.selectedThemeColors().InActiveTabBar,
+    borderColor: Utills.selectedThemeColors().Grey,
     marginTop: 25,
   },
   preference: {

@@ -35,7 +35,7 @@ export const MainStack = () => {
         initialRouteName={
           authorize
             ? RouteNames.AuthRoutes.LoginScreen
-            : RouteNames.HomeRoutes.Dashboard
+            : RouteNames.HomeRoutes.DrawerStack
         }
         screenOptions={{
           headerShown: false,
