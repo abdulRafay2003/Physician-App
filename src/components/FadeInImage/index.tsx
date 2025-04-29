@@ -39,19 +39,6 @@ export const FadeInImage: React.FC<FadeInImageProps> = ({
 
   return (
     <View style={customImageContainerStyle}>
-      {isLoad && (
-        <LottieAnimatedComponent
-          src={require('../../assets/animations/loadingImage.json')}
-          customStyle={{
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
-            top: 0,
-            zIndex: 100,
-          }}
-        />
-      )}
-
       <Image
         source={source}
         style={[

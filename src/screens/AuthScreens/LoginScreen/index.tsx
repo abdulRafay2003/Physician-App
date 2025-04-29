@@ -68,7 +68,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({}) => {
           <AuthHeader
             heading={t('Sign In')}
             title={t('Sign In')}
-            paragraph="Please enter your email and password to log in to your account"
+            paragraph="Please log in using your email and password, or authenticate with your biometric credentials."
             customStyles={styles.buttonContainer}
             isBtn
             onPress={() => handleSubmit()}>
@@ -109,7 +109,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({}) => {
                 borderWidth: 1,
                 width: Metrix.HorizontalSize(50),
                 height: Metrix.HorizontalSize(50),
-                borderRadius: Metrix.HorizontalSize(100),
+                borderRadius: Metrix.HorizontalSize(10),
                 padding: 5,
                 marginVertical: Metrix.VerticalSize(5),
                 alignSelf: 'center',

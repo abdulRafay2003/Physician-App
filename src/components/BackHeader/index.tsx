@@ -63,7 +63,7 @@ export const BackHeader: React.FC<BackHeaderProps> = ({
             customStyle={{
               fontWeight: '700',
               fontSize: normalizeFont(20),
-              color: Utills.selectedThemeColors().Secondary,
+              color: Utills.selectedThemeColors().Primary,
             }}>
             {heading}
           </CustomText.MediumText>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   backImage: {
     width: Metrix.HorizontalSize(30),
     height: Metrix.VerticalSize(30),
-    tintColor: utills.selectedThemeColors()?.Secondary,
+    tintColor: utills.selectedThemeColors()?.Primary,
   },
   headingContainer: {
     // paddingVertical:5,

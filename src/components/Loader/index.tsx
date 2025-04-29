@@ -1,19 +1,13 @@
 import {
   ActivityIndicator,
   Modal,
-  Platform,
   StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from 'react-native';
 import React from 'react';
-import {Colors, Metrix, Utills} from '../../config';
+import {Utills} from '../../config';
 import {ActivityIndicatorProps} from 'react-native-paper';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/reducers';
-import {CustomText, LottieAnimatedComponent} from '..';
-import {useThemeHook} from '../../hooks';
 
 type LoaderProps = ActivityIndicatorProps & {isLoading: any};
 
@@ -25,12 +19,10 @@ export const Loader: React.FC<LoaderProps> = ({
     return (
       <Modal visible={isLoading} transparent={true} animationType={'fade'}>
         <View style={styles.mainContaienr}>
-          {/* <CustomText.MediumText>
-            {`Auth : ${checkingAuthActionLoader}`}
-            {`Home : ${checkingHomeActionLoader}`}
-          </CustomText.MediumText> */}
-          <ActivityIndicator size={size} color={Utills.selectedThemeColors().Primary} />
-          {/* <LottieAnimatedComponent speed={1.5} /> */}
+          <ActivityIndicator
+            size={size}
+            color={Utills.selectedThemeColors().Primary}
+          />
         </View>
       </Modal>
     );

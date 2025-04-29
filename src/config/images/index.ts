@@ -11,6 +11,8 @@ const Images = {
   Fingerprint: require('../../assets/icons/fingerprint.png'),
   FadeId: require('../../assets/icons/faceid.png'),
   Notification: require('../../assets/icons/notification.png'),
+  Tick: require('../../assets/icons/tick.png'),
+  Close: require('../../assets/icons/close.png'),
   AppIcon: require('../../assets/images/appIcon.png'),
   BackgroundImage: require('../../assets/images/background.png'),
 };

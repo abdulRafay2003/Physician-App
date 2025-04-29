@@ -5,16 +5,17 @@ import {MainContainer} from './MainContainer';
 import {ScrollableContainer} from './ScrollableContainer';
 import {BackHeader} from './BackHeader';
 import {AuthHeader} from './AuthHeader';
-import {SecondaryButton} from './SecondaryButton';
 import {FadeInImage} from './FadeInImage';
 import {RoundImageContainer} from './RoundImageContainer';
-import {CustomModal} from './CustomModal/CustomModal';
+import {AlertModal} from './AlertModal/AlertModal';
 import {FadeContainer} from './FadeContainer/FadeContainer';
 import {Loader} from './Loader';
-import {LottieAnimatedComponent} from './LottieAnimatedComponent';
 import {EmptyState} from './EmptyState';
 import {NormalCardComponent} from './NormalCard';
 import {Banner} from './Banner';
+import {ShadowContainer} from './ShadowContainer';
+import {AppointmentCard} from './AppointmentCard';
+import {WeekDatePicker} from './WeekDatePicker';
 
 export {
   CustomText,
@@ -24,14 +25,15 @@ export {
   ScrollableContainer,
   BackHeader,
   AuthHeader,
-  SecondaryButton,
   FadeInImage,
   RoundImageContainer,
-  CustomModal,
+  AlertModal,
   FadeContainer,
   Loader,
-  LottieAnimatedComponent,
   EmptyState,
   NormalCardComponent,
   Banner,
+  ShadowContainer,
+  AppointmentCard,
+  WeekDatePicker,
 };

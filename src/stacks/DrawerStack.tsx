@@ -3,105 +3,116 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  ImageProps,
   Alert,
+  Switch,
+  ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
-import {Images, Metrix, NavigationService, RouteNames, Utills} from '../config';
-import {CustomText, Loader} from '../components';
-import {useDispatch, useSelector} from 'react-redux';
+import {
+  FontType,
+  Images,
+  Metrix,
+  NavigationService,
+  RouteNames,
+  Utills,
+} from '../config';
+import {Banner, CustomText, Loader, MainContainer} from '../components';
+import {useDispatch} from 'react-redux';
 import {AuthActions, HomeActions} from '../redux/actions';
 import utills from '../config/utills';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Dashboard, WebView} from '../screens';
+import {AppointmentDetail, Dashboard, ReferredPatients} from '../screens';
+import {normalizeFont} from '../config/metrix';
+import {useNavigation, useNavigationState} from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerContent: React.FC = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  // console.log('Screeen', currentScreen);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const handleLogout = () => {
+    Alert.alert('Are you sure you want to logout?', '', [
+      {
+        text: 'No',
+      },
+      {
+        text: 'Yes',
+        onPress: () => {
+          AsyncStorage.setItem('userData', JSON.stringify({}));
+          dispatch(HomeActions.setUserDetails({}));
+          dispatch(AuthActions.loginSuccess(false));
+        },
+      },
+    ]);
+  };
 
   const DrawerElement = [
     {
+      id: '1',
       label: 'Patients Referred',
       onPress: () => {
-        NavigationService.navigate(RouteNames.HomeRoutes.WebView, {
-          from: 'About us',
-          url: 'https://github.com/iamStephenFang/react-native-heart-rate-monitor?tab=readme-ov-file',
-        });
+        NavigationService.navigate(RouteNames.HomeRoutes.ReferredPatients);
       },
     },
     {
+      id: '2',
       label: 'Logout',
-      onPress: () => {
-        Alert.alert('Are you sure you want to logout?', '', [
-          {
-            text: 'No',
-          },
-          {
-            text: 'Yes',
-            onPress: () => {
-              AsyncStorage.setItem('userData', JSON.stringify({}));
-              dispatch(HomeActions.setUserDetails({}));
-              dispatch(AuthActions.loginSuccess(false));
-            },
-          },
-        ]);
-      },
+      onPress: handleLogout,
+    },
+    {
+      id: '3',
+      label: 'Biometric Login',
+      onPress: () => {},
     },
   ];
   return (
-    <View style={styles.userInfoSection}>
-      <View style={styles.drawerSection}>
-        {DrawerElement.map((option, index) => (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            key={index}
-            style={{
-              // borderWidth:1,
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-              paddingRight: Metrix.HorizontalSize(20),
-            }}>
-            <DrawerItem
-              // icon={({color, size}) => (
-              //   <Image
-              //     key={index}
-              //     source={option.icon}
-              //     style={{
-              //       width: Metrix.HorizontalSize(18),
-              //       height: Metrix.HorizontalSize(18),
-              //       // tintColor: Utills.selectedThemeColors().PrimaryTextColor,
-              //     }}
-              //     resizeMode="contain"
-              //   />
-              // )}
-              label={option.label}
-              labelStyle={{
-                fontSize: 14,
-                color: '#222',
-              }}
-              onPress={option.onPress}
-              style={{width: '80%'}}
-            />
-            <Image
+    <ImageBackground
+      source={Images.BackgroundImage}
+      style={styles.backgroundImage}>
+      <MainContainer customeStyle={{paddingHorizontal: 0}}>
+        <View>
+          {DrawerElement.map((option, index) => (
+            <TouchableOpacity
+              activeOpacity={0.8}
               key={index}
-              source={Images.Stroke}
-              style={{
-                width: Metrix.HorizontalSize(10),
-                height: Metrix.VerticalSize(10),
-              }}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        ))}
-      </View>
-      <Loader isLoading={loading} />
-    </View>
-    // </DrawerContentScrollView>
+              style={styles.drawerItemContainer}>
+              <DrawerItem
+                label={option.label}
+                labelStyle={styles.drawerItemText}
+                onPress={option.onPress}
+                style={{width: '80%'}}
+              />
+              {option.id != '3' ? (
+                <Image
+                  source={Images.Arrow}
+                  style={styles.drawerItemImg}
+                  resizeMode="contain"
+                />
+              ) : (
+                <Switch
+                  trackColor={{
+                    false: '#767577',
+                    true: Utills.selectedThemeColors().Primary,
+                  }}
+                  thumbColor={Utills.selectedThemeColors().Base}
+                  ios_backgroundColor={
+                    Utills.selectedThemeColors().SecondaryTextColor
+                  }
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+        <Loader isLoading={loading} />
+      </MainContainer>
+    </ImageBackground>
   );
 };
 
@@ -110,24 +121,18 @@ const HeaderIconsComponent: React.FC<{
 }> = ({item}) => (
   <>
     {item?.id == '2' ? (
-      <CustomText.RegularText>{item?.title}</CustomText.RegularText>
+      <CustomText.MediumText customStyle={styles.headerHeading}>
+        {item?.title}
+      </CustomText.MediumText>
     ) : (
       <TouchableOpacity
-        style={{
-          padding: Metrix.HorizontalSize(12),
-          borderRadius: Metrix.HorizontalSize(100),
-          backgroundColor: utills.selectedThemeColors().Base,
-          ...Metrix.cardShadow,
-        }}
+        activeOpacity={0.8}
+        style={styles.circularView}
         onPress={item?.onPress}>
         <Image
           source={item?.icon}
           resizeMode="contain"
-          style={{
-            width: Metrix.HorizontalSize(item?.size || 22),
-            height: Metrix.VerticalSize(item?.size || 22),
-            tintColor: utills.selectedThemeColors().Primary,
-          }}
+          style={styles.drawerIcons}
         />
       </TouchableOpacity>
     )}
@@ -135,39 +140,51 @@ const HeaderIconsComponent: React.FC<{
 );
 
 const CustomHeader = ({navigation}: {navigation: any}) => {
-  //   const navigation = useNavigation();
+  const currentRouteIndex = useNavigationState(state => state?.index);
+  const currentRouteName = useNavigationState(
+    state => state?.routes?.[currentRouteIndex]?.name,
+  );
+  const isAppointmentDetail =
+    currentRouteName === RouteNames.HomeRoutes.AppointmentDetail;
+  const isReferredPatient =
+    currentRouteName === RouteNames.HomeRoutes.ReferredPatients;
 
   const headerIconsData = [
     {
       id: '1',
-      icon: Images.Drawer,
-      onPress: () => navigation?.openDrawer(),
+      icon:
+        isAppointmentDetail || isReferredPatient ? Images.Arrow : Images.Drawer,
+      onPress: () => {
+        isAppointmentDetail || isReferredPatient
+          ? NavigationService.goBack()
+          : navigation?.openDrawer();
+      },
     },
     {
       id: '2',
-      title: 'Images.Drawer',
-      onPress: () => navigation?.openDrawer(),
+      title: isAppointmentDetail
+        ? 'Patient Profile'
+        : isReferredPatient
+        ? 'Patient Referred'
+        : 'Welcome \n Dr. Humayun Naqvi',
     },
     {
       id: '3',
       icon: Images.Notification,
-      onPress: () => navigation?.openDrawer(),
+      onPress: () => {
+        NavigationService.navigate(RouteNames.HomeRoutes.Notifications);
+      },
     },
   ];
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: Metrix.HorizontalSize(20),
-        marginTop: Metrix.VerticalSize(50),
-        borderWidth: 1,
-      }}>
-      {headerIconsData?.map((item: any) => (
-        <HeaderIconsComponent item={item} />
-      ))}
-    </View>
+    <>
+      <Banner />
+      <View style={styles.headerContainer}>
+        {headerIconsData?.map((item: any) => (
+          <HeaderIconsComponent item={item} />
+        ))}
+      </View>
+    </>
   );
 };
 
@@ -184,53 +201,60 @@ export const DrawerStack: React.FC = () => {
         name={RouteNames.HomeRoutes.Dashboard}
         component={Dashboard}
       />
-      <Drawer.Screen name={RouteNames.HomeRoutes.WebView} component={WebView} />
+      <Drawer.Screen
+        name={RouteNames.HomeRoutes.AppointmentDetail}
+        component={AppointmentDetail}
+      />
+      <Drawer.Screen
+        name={RouteNames.HomeRoutes.ReferredPatients}
+        component={ReferredPatients}
+      />
     </Drawer.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
-  drawerContent: {
-    position: 'absolute',
-    zIndex: 999,
-    flex: 1,
-  },
-  userInfoSection: {
-    marginTop: 50,
-  },
-  title: {
-    marginTop: 20,
-    fontWeight: 'bold',
-  },
-  caption: {
-    fontSize: 14,
-    lineHeight: 14,
-  },
-  row: {
-    marginTop: 20,
+  drawerItemContainer: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingRight: Metrix.HorizontalSize(30),
   },
-  section: {
-    borderWidth: 1,
+  drawerItemText: {
+    fontSize: FontType.FontRegular,
+    color: utills.selectedThemeColors().Primary,
+    fontWeight: '600',
+  },
+  drawerItemImg: {
+    width: Metrix.HorizontalSize(18),
+    height: Metrix.VerticalSize(18),
+    transform: [{rotate: '180deg'}],
+  },
+  headerHeading: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    width: '60%',
+    fontSize: normalizeFont(18),
+  },
+  circularView: {
+    padding: Metrix.HorizontalSize(12),
+    borderRadius: Metrix.HorizontalSize(100),
+    backgroundColor: utills.selectedThemeColors().Base,
+    ...Metrix.cardShadow,
+  },
+  drawerIcons: {
+    width: Metrix.HorizontalSize(22),
+    height: Metrix.VerticalSize(22),
+    tintColor: utills.selectedThemeColors().Primary,
+  },
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 15,
-  },
-  paragraph: {
-    fontWeight: 'bold',
-    marginRight: 3,
-  },
-  drawerSection: {
-    paddingTop: 25,
-    borderTopWidth: 1,
-    borderColor: Utills.selectedThemeColors().Grey,
-    marginTop: 25,
-  },
-  preference: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: Metrix.HorizontalSize(20),
+    marginTop: Metrix.VerticalSize(20),
+    width: '100%',
   },
+  backgroundImage: {width: '100%', height: '100%'},
 });

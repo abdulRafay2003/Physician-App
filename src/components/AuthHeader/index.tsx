@@ -80,11 +80,9 @@ const styles = StyleSheet.create({
   },
   childrenView: {
     marginVertical: Metrix.VerticalSize(20),
-    flex: 4,
     justifyContent: 'space-between',
   },
   childrenContainer: {
-    // borderWidth: 1,
     width: '90%',
     alignSelf: 'center',
     paddingVertical: Metrix.VerticalSize(10),

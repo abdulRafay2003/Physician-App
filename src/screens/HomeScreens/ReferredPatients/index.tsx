@@ -1,6 +1,6 @@
 import {FlatList, ImageBackground, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
-import {DashboardProps} from '../../propTypes';
+import {ReferredPatientsProps} from '../../propTypes';
 import {
   AppointmentCard,
   CustomText,
@@ -19,27 +19,12 @@ interface HandleDateSelectParams {
 const aapointment_data = [
   {
     id: '1',
-    title: 'Leonardo DiCaprio',
-    time: '11:00 AM',
-  },
-  {
-    id: '2',
-    title: 'Robert Downey Jr.',
-    time: '1:00 PM',
-  },
-  {
-    id: '3',
-    title: 'Christian Bale',
-    time: '5:00 PM',
-  },
-  {
-    id: '4',
-    title: 'Cristiano Ronaldo',
-    time: '11:00 PM',
+    title: 'Johny Depp',
+    time: 'FGH-ZZ-4321',
   },
 ];
 
-export const Dashboard: React.FC<DashboardProps> = ({}) => {
+export const ReferredPatients: React.FC<ReferredPatientsProps> = ({}) => {
   const [loading, setLoading] = useState(false);
 
   const handleDateSelect = (date: HandleDateSelectParams['date']): void => {
@@ -51,9 +36,6 @@ export const Dashboard: React.FC<DashboardProps> = ({}) => {
       <AppointmentCard
         item={item}
         customContainerStyle={styles.aapointmentCard}
-        onPress={() => {
-          NavigationService.navigate(RouteNames.HomeRoutes.AppointmentDetail);
-        }}
       />
     );
   };
@@ -65,9 +47,6 @@ export const Dashboard: React.FC<DashboardProps> = ({}) => {
       <MainContainer>
         <ShadowContainer>
           <WeekDatePicker onDateSelect={handleDateSelect} />
-          <CustomText.MediumText customStyle={styles.heading}>
-            Appointments
-          </CustomText.MediumText>
           <FlatList
             data={aapointment_data}
             renderItem={renderAppointmentItem}

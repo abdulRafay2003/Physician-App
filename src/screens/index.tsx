@@ -1,15 +1,17 @@
 // Auth Screens
 import {LoginScreen} from './AuthScreens/LoginScreen';
-import {ForgotPassword} from './AuthScreens/ForgotPassword';
 // Home Screens
-import {WebView} from './HomeScreens/WebView';
 import {Dashboard} from './HomeScreens/Dashboard';
+import {Notifications} from './HomeScreens/Notifications';
+import {AppointmentDetail} from './HomeScreens/AppointmentDetail';
+import {ReferredPatients} from './HomeScreens/ReferredPatients';
 
 export {
   // Auth Screens
   LoginScreen,
-  ForgotPassword,
   // Home Screens
-  WebView,
   Dashboard,
+  Notifications,
+  AppointmentDetail,
+  ReferredPatients,
 };
