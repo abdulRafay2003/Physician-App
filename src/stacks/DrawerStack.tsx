@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Metrix.HorizontalSize(20),
     marginTop: Metrix.VerticalSize(20),
+    marginBottom: Metrix.VerticalSize(10),
     width: '100%',
   },
   backgroundImage: {width: '100%', height: '100%'},

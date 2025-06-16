@@ -11,6 +11,8 @@ import {
 } from '../../../components';
 import {Images, Metrix, NavigationService, RouteNames} from '../../../config';
 import {normalizeFont} from '../../../config/metrix';
+import {RootState} from '../../../redux/reducers';
+import {useSelector} from 'react-redux';
 
 interface HandleDateSelectParams {
   date: string;
@@ -40,7 +42,9 @@ const aapointment_data = [
 ];
 
 export const Dashboard: React.FC<DashboardProps> = ({}) => {
+  const userDetails = useSelector((state: RootState) => state.home.userDetails);
   const [loading, setLoading] = useState(false);
+  console.log('userDetails', userDetails);
 
   const handleDateSelect = (date: HandleDateSelectParams['date']): void => {
     console.log('Selected date:', date);

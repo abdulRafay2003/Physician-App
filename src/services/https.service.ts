@@ -8,7 +8,6 @@ const customAxios = (contentType: string = 'application/json') => {
     headers: {'Content-Type': contentType},
     timeout: API_TIMEOUT,
   });
-
   instance.interceptors.request.use(async (config: any) => {
     var token = util.getCurrentUserAccessToken();
     console.log('TOKEN---', token);
@@ -18,7 +17,6 @@ const customAxios = (contentType: string = 'application/json') => {
         authorization: `Bearer ${token}`,
       };
     }
-
     return config;
   });
 

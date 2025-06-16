@@ -20,6 +20,9 @@ import SplashScreen from 'react-native-splash-screen';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import './src/i18n';
 
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+const queryClient = new QueryClient();
+
 function App(): JSX.Element {
   const toastConfig = {
     info: (props: ToastProps) => (
@@ -93,22 +96,13 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    <NavigationContainer
-      ref={ref => NavigationService.setTopLevelNavigator(ref)}
-      theme={{
-        dark: true,
-        colors: {
-          background: Utills.selectedThemeColors().Base,
-          primary: Utills.selectedThemeColors().Base,
-          card: Utills.selectedThemeColors().Base,
-          text: Utills.selectedThemeColors().Base,
-          border: Utills.selectedThemeColors().Base,
-          notification: Utills.selectedThemeColors().Base,
-        },
-      }}>
-      <MainStack />
-      <Toast config={toastConfig} />
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer
+        ref={ref => NavigationService.setTopLevelNavigator(ref)}>
+        <MainStack />
+        <Toast config={toastConfig} />
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 

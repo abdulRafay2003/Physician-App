@@ -6,7 +6,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import React from 'react';
-import {Utills} from '../../config';
+import {Metrix, Utills} from '../../config';
 import {ActivityIndicatorProps} from 'react-native-paper';
 
 type LoaderProps = ActivityIndicatorProps & {isLoading: any};
@@ -19,10 +19,17 @@ export const Loader: React.FC<LoaderProps> = ({
     return (
       <Modal visible={isLoading} transparent={true} animationType={'fade'}>
         <View style={styles.mainContaienr}>
-          <ActivityIndicator
-            size={size}
-            color={Utills.selectedThemeColors().Primary}
-          />
+          <View
+            style={{
+              padding: Metrix.HorizontalSize(22),
+              borderRadius: Metrix.HorizontalSize(10),
+              backgroundColor: Utills.selectedThemeColors().Base,
+            }}>
+            <ActivityIndicator
+              size={size}
+              color={Utills.selectedThemeColors().Primary}
+            />
+          </View>
         </View>
       </Modal>
     );
