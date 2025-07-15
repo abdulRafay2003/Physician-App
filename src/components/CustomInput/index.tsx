@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {CustomText} from '..';
 import {Fonts, Metrix, Images, Utills} from '../../config';
+import React from 'react';
 
 type CustomInputProps = TextInputProps & {
   customStyle?: TextInputProps['style'];
@@ -21,7 +22,6 @@ type CustomInputProps = TextInputProps & {
   error?: string;
   touched?: boolean;
   inputRef?: Ref<TextInput>;
-  heading?: string;
   mainContainerStyle?: any;
   editable?: boolean;
 };
@@ -36,7 +36,6 @@ export const CustomInput: FC<CustomInputProps> = ({
   error,
   touched,
   inputRef,
-  heading,
   mainContainerStyle,
   editable = true,
   ...rest

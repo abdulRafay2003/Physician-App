@@ -1,5 +1,5 @@
 import {FlatList, ImageBackground, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {DashboardProps} from '../../propTypes';
 import {
   AppointmentCard,
@@ -13,38 +13,59 @@ import {Images, Metrix, NavigationService, RouteNames} from '../../../config';
 import {normalizeFont} from '../../../config/metrix';
 import {RootState} from '../../../redux/reducers';
 import {useSelector} from 'react-redux';
+import {useQuery} from '@tanstack/react-query';
+import {HomeAPIS} from '../../../services/home';
+import moment from 'moment';
 
 interface HandleDateSelectParams {
   date: string;
 }
 
-const aapointment_data = [
-  {
-    id: '1',
-    title: 'Leonardo DiCaprio',
-    time: '11:00 AM',
-  },
-  {
-    id: '2',
-    title: 'Robert Downey Jr.',
-    time: '1:00 PM',
-  },
-  {
-    id: '3',
-    title: 'Christian Bale',
-    time: '5:00 PM',
-  },
-  {
-    id: '4',
-    title: 'Cristiano Ronaldo',
-    time: '11:00 PM',
-  },
-];
+const fetPhysicianLeads = async () => {
+  const response = await HomeAPIS.physicianLeads();
+  const data = response?.data;
+  const status = response?.status;
+  if (status == 200) {
+    let array: any = [];
+    data?.patients?.map((item: any) => {
+      array?.push({
+        leadId: item?.lead_id,
+        assignId: item?.assign_id,
+        email: item?.email,
+        phone: item?.phone,
+        protocol: item?.protocol_name,
+        status: item?.status,
+        title: item?.name,
+        time: moment(item?.visit_date).format('hh:mm A'),
+      });
+    });
+    return {data: array};
+  } else {
+    throw new Error('Login failed');
+  }
+};
 
 export const Dashboard: React.FC<DashboardProps> = ({}) => {
   const userDetails = useSelector((state: RootState) => state.home.userDetails);
   const [loading, setLoading] = useState(false);
-  console.log('userDetails', userDetails);
+  const [physicianLeads, setPhysicianLeads] = useState([]);
+  console.log('physicianLeads', physicianLeads);
+
+  const {data, error, isLoading} = useQuery({
+    queryKey: ['fetPhysicianLeads'],
+    queryFn: () => fetPhysicianLeads(),
+    staleTime: 300000,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setPhysicianLeads(data.data);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
+  }
 
   const handleDateSelect = (date: HandleDateSelectParams['date']): void => {
     console.log('Selected date:', date);
@@ -73,10 +94,10 @@ export const Dashboard: React.FC<DashboardProps> = ({}) => {
             Appointments
           </CustomText.MediumText>
           <FlatList
-            data={aapointment_data}
+            data={physicianLeads}
             renderItem={renderAppointmentItem}
             contentContainerStyle={styles.flatlist}
-            keyExtractor={item => item?.id}
+            keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
           />
         </ShadowContainer>

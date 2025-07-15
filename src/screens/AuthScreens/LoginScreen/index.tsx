@@ -29,7 +29,7 @@ interface LoginBody {
 
 const handleLogin = async (body: LoginBody) => {
   const response = await AuthAPIS.login(body);
-  console.log('Response', response?.status, response?.data);
+  // console.log('Response', response?.status, response?.data);
   const data = response?.data;
   if (data) {
     return {data};
@@ -48,12 +48,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({}) => {
   const {mutate, error, data} = useMutation({
     mutationFn: handleLogin,
     onSuccess: (data: any) => {
-      console.log('Success', data);
       setLoading(false);
       dispatch(
         HomeActions.setUserDetails({
-          ...data?.user,
-          token: data?.token,
+          ...data?.data?.user,
+          token: data?.data?.token,
         }),
       );
       dispatch(AuthActions.loginSuccess(true));
@@ -93,8 +92,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({}) => {
             isBtn
             onPress={() => handleSubmit()}>
             <CustomInput
-              heading={t('email')}
-              placeholder={t('enter_mail')}
+              placeholder={'Enter your email address'}
               onChangeText={handleChange('email')}
               onBlur={() => setFieldTouched('email')}
               value={values?.email}
@@ -106,8 +104,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({}) => {
               onSubmitEditing={() => passwordRef.current.focus()}
             />
             <CustomInput
-              heading={t('password')}
-              placeholder={t('enter_your_password')}
+              placeholder={'Enter your password'}
               value={values?.password}
               onChangeText={handleChange('password')}
               onBlur={() => setFieldTouched('password')}
